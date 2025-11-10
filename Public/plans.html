@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plans | ReceptAInist</title>
+  <style>
+    :root {
+      --purple: #8c3dff;
+      --pink: #ff3dbb;
+      --bg: #f9f7ff;
+      --card: #fff;
+      --ink: #111;
+      --muted: #666;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+  margin-top: 40px;
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+}
+
+    .plans {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      margin: 40px 0;
+      width: 90%;
+      max-width: 700px;
+    }
+
+    .plan {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 30px 25px;
+      box-shadow: 0 8px 25px rgba(140, 61, 255, 0.15);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .plan:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(140, 61, 255, 0.25);
+    }
+
+    .plan h2 {
+      font-size: 1.6rem;
+      color: var(--purple);
+      margin-bottom: 15px;
+    }
+
+    .plan ul {
+      text-align: left;
+      margin: 0 auto 20px;
+      padding: 0;
+      list-style: none;
+      max-width: 500px;
+    }
+
+    .plan ul li {
+      margin: 8px 0;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .price {
+      font-size: 1.1rem;
+      margin: 10px 0 20px;
+      font-weight: 600;
+    }
+
+    .btn {
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(140, 61, 255, 0.28);
+      transition: transform 0.1s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 20px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    @media (min-width: 768px) {
+      .plans {
+        flex-direction: row;
+        justify-content: center;
+        align-items: stretch;
+      }
+
+      .plan {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Choose Your AI Receptionist Plan</h1>
+
+  <div class="plans">
+    <!-- Website AI Receptionist -->
+    <div class="plan">
+      <h2>🌐 Website AI Receptionist</h2>
+      <ul>
+        <li>✅ 24/7 Website AI Receptionist</li>
+        <li>✅ Custom branding & logo integration</li>
+        <li>✅ Real-time lead capture & booking</li>
+        <li>✅ Works on all devices</li>
+        <li>💬 Standard AI Voices (Coral, Alice, Daniel)</li>
+      </ul>
+      <p class="price">£299 Setup | £199 / month</p>
+      <button class="btn" onclick="selectPlan('website')">Choose This Plan</button>
+    </div>
+
+    <!-- Telephone AI Receptionist -->
+    <div class="plan">
+      <h2>📞 Telephone AI Receptionist</h2>
+      <ul>
+        <li>✅ Everything from Website AI Receptionist</li>
+        <li>✅ Full phone answering (inbound & outbound)</li>
+        <li>✅ Custom greetings & routing</li>
+        <li>🎙️ Premium & Elite Voice Options</li>
+        <li>📊 CRM Integration & call logs</li>
+      </ul>
+      <p class="price">£499 Setup | £399 / month</p>
+      <button class="btn" onclick="selectPlan('telephone')">Choose This Plan</button>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 ReceptAInist | 24/7 AI Receptionist — Never Miss A Lead Again
+  </footer>
+
+  <script>
+    function selectPlan(plan) {
+      window.location.href = `/choose-voice.html?plan=${plan}`;
+    }
+  </script>
+</body>
+</html>

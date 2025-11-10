@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Become a Client | ReceiptAInist</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --purple:#8c3dff;
+      --pink:#ff3dbb;
+      --bg:#0c0b10;
+      --card:#ffffff;
+      --ink:#111;
+      --muted:#666;
+      --accent:#5b1bd6;
+      --accent2:#b832e6;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Poppins", sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.5;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 800;
+      margin-top: 40px;
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p {
+      text-align: center;
+      color: #444;
+      margin-bottom: 20px;
+    }
+
+    form {
+      max-width: 500px;
+      background: var(--card);
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 14px;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    input, textarea, select {
+      width: 100%;
+      margin-top: 5px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-family: inherit;
+    }
+
+    .btn {
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-weight: 800;
+      letter-spacing: .2px;
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(140, 61, 255, 0.28);
+      transition: transform .06s ease, box-shadow .2s ease, opacity .2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(140, 61, 255, 0.3);
+    }
+
+    /* ===== PRICING SECTION ===== */
+    .pricing-wrap {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+      border-radius: 16px;
+      background: #ffffff;
+      color: #111;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+
+    .pricing-wrap h2 {
+      margin-top: 0;
+      font-size: 1.6rem;
+      font-weight: 800;
+      text-align: center;
+      color: #111;
+    }
+
+    .pricing-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .plan-card {
+      flex: 1 1 260px;
+      border-radius: 14px;
+      border: 1px solid #eee;
+      padding: 16px 18px;
+      background: #faf8ff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .plan-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.2rem;
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .price-main {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin: 4px 0;
+    }
+
+    .price-main span {
+      font-size: 0.8rem;
+      color: #555;
+      font-weight: 500;
+    }
+
+    .price-sub {
+      font-size: 0.9rem;
+      color: #444;
+      margin-bottom: 8px;
+    }
+
+    .plan-card ul {
+      padding-left: 18px;
+      margin: 6px 0 12px;
+      font-size: 0.9rem;
+      color: #444;
+    }
+
+    .plan-card ul li {
+      margin-bottom: 4px;
+    }
+
+    .plan-card .btn {
+      width: 100%;
+      text-align: center;
+      font-size: 0.9rem;
+      margin-top: auto;
+    }
+
+    @media (max-width:768px) {
+      .pricing-wrap {
+        margin: 20px 12px;
+        padding: 16px;
+      }
+      .pricing-row {
+        flex-direction: column;
+      }
+    }
+    .voice-section {
+  max-width: 700px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #faf8ff;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+}
+
+.voice-section legend {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--purple);
+}
+
+.voice-tier {
+  margin-top: 16px;
+}
+
+.voice-tier h4 {
+  color: var(--pink);
+  margin-bottom: 8px;
+}
+
+.voice-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+}
+
+.voice-option audio {
+  height: 30px;
+  margin-left: 10px;
+}
+select[name="voice_name"] {
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-family: inherit;
+  background-color: #fff;
+}
+
+optgroup {
+  font-weight: 700;
+  color: var(--purple);
+}
+
+  </style>
+</head>
+
+<body>
+  <h1>Become a Client</h1>
+  <p>Never miss a lead again. Fill in your details below.</p>
+<!-- Banner that shows which plan was selected -->
+<div id="planNotice"
+     style="display:none;
+            max-width:500px;
+            margin:10px auto;
+            padding:10px;
+            border-radius:8px;
+            background:#eaf2ff;
+            color:#111;
+            font-weight:600;
+            text-align:center;
+            border:1px solid #b3c9ff;">
+</div>
+
+  <form method="POST" action="/signup">
+    <input type="hidden" name="plan" id="planInput" value="">
+
+    <label>Business Name:</label>
+    <input type="text" name="company" placeholder="e.g. Templeman AI" required>
+
+    <label>Your Email:</label>
+    <input type="email" name="email" placeholder="you@business.com" required>
+
+    <label>Phone Number:</label>
+    <input type="text" name="phone" placeholder="e.g. +44 7123 456789" required>
+
+    <label>Business Type / Notes:</label>
+    <textarea name="notes" placeholder="E.g. Roofing business, needs call answering"></textarea>
+<!-- 🎙️ Voice Selection Section -->
+<label>Choose your voice:</label>
+<select name="voice_name" required>
+  <option value="">-- Select a voice --</option>
+
+  <!-- Standard (Included) -->
+  <optgroup label="🎧 Standard Voices (Included)">
+    <option value="Derek (Standard)">Derek – Standard (included)</option>
+    <option value="Clyde (Standard)">Clyde – Standard (included)</option>
+  </optgroup>
+
+  <!-- Premium (+£49/month) -->
+  <optgroup label="💎 Premium Voices (+£49/month)">
+    <option value="Blondi (Premium)">Blondi – Premium (+£49/month)</option>
+    <option value="Clara (Premium)">Clara – Premium (+£49/month)</option>
+    <option value="Frederick Surry (Premium)">Frederick Surry – Premium (+£49/month)</option>
+    <option value="Hope (Premium)">Hope – Premium (+£49/month)</option>
+  </optgroup>
+
+  <!-- Elite (+£99/month) -->
+  <optgroup label="🚀 Elite Voices (+£99/month)">
+    <option value="James (Elite)">James – Elite (+£99/month)</option>
+    <option value="Jess (Elite)">Jess – Elite (+£99/month)</option>
+    <option value="Lily (Elite)">Lily – Elite (+£99/month)</option>
+  </optgroup>
+</select>
+
+
+<!-- Hidden field to capture tier -->
+<input type="hidden" name="voice_tier" id="voiceTier" value="">
+
+    <button type="submit" class="btn">Submit & Request Setup</button>
+  </form>
+
+  <!-- ===== PRICING & SETUP PAYMENT ===== -->
+  <section class="pricing-wrap">
+    <h2>Choose your plan & pay your setup fee</h2>
+
+    <div class="pricing-row">
+      <!-- WEBSITE RECEPTIONIST -->
+      <div class="plan-card">
+        <h3>🌐 Website Receptionist</h3>
+        <p class="price-main">£299 <span>one-off setup</span></p>
+        <p class="price-sub">£199 / month service</p>
+        <ul>
+          <li>AI receptionist embedded on your website</li>
+          <li>Answers FAQs and captures leads 24/7</li>
+          <li>Missed revenue calculator & lead capture</li>
+          <li>Standard voice options included</li>
+        </ul>
+        <a href="https://buy.stripe.com/7sY14n4qGaZH04nh280ZW00"
+           class="btn" target="_blank" rel="noopener">
+          Pay £299 Website Setup
+        </a>
+      </div>
+
+      <!-- TELEPHONE RECEPTIONIST -->
+      <div class="plan-card">
+        <h3>📞 Telephone Receptionist</h3>
+        <p class="price-main">£499 <span>one-off setup</span></p>
+        <p class="price-sub">£399 / month service</p>
+        <ul>
+          <li>Dedicated AI phone receptionist number</li>
+          <li>Answers, qualifies & books appointments 24/7</li>
+          <li>Call summaries & missed lead reports</li>
+          <li>Access to premium / elite voice options</li>
+        </ul>
+        <a href="https://buy.stripe.com/9B63cve1gc3L3gz5jq0ZW01"
+           class="btn" target="_blank" rel="noopener">
+          Pay £499 Telephone Setup
+        </a>
+      </div>
+    </div>
+
+    <p style="font-size:0.85rem;color:#555;text-align:center;margin-top:20px;">
+      Once you’ve submitted the form above, one of the team will contact you to complete your setup and activate your AI receptionist.
+    </p>
+  </section>
+ <script>
+  (function () {
+    var planInput = document.getElementById("planInput");
+    var notice = document.getElementById("planNotice");
+
+    if (!planInput || !notice) {
+      return;
+    }
+
+    function showNotice(plan) {
+      notice.textContent = "✅ You've selected the " + plan + " plan";
+      notice.style.display = "block";
+    }
+
+    var buttons = document.querySelectorAll(".plan-card .btn");
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].addEventListener("click", function () {
+        var card = this.closest ? this.closest(".plan-card") : this.parentNode;
+
+        // Fallback if closest isn't supported
+        while (card && (!card.className || card.className.indexOf("plan-card") === -1)) {
+          card = card.parentNode;
+        }
+
+        if (!card) return;
+
+        var titleEl = card.querySelector("h3");
+        if (!titleEl) return;
+
+        var planTitle = titleEl.textContent || titleEl.innerText;
+        if (!planTitle) return;
+
+        planInput.value = planTitle;
+        showNotice(planTitle);
+        console.log("Selected plan:", planTitle);
+      });
+    }
+  })();
+</script>
+<script>
+  // Auto-fill the tier based on selected voice
+  document.querySelectorAll('input[name="voice_name"]').forEach(input => {
+    input.addEventListener('change', function () {
+      const val = this.value;
+      const tier = val.includes('(Elite)') ? 'Elite'
+                  : val.includes('(Premium)') ? 'Premium'
+                  : 'Standard';
+      document.getElementById('voiceTier').value = tier;
+      console.log('Selected voice:', val, '| Tier:', tier);
+    });
+  });
+</script>
+</body>
+</html>
+
+</body>
+</html>

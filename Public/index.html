@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Templeman AI – ReceptAInist Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root{
+      --purple:#8c3dff;
+      --pink:#ff3dbb;
+      --bg:#0c0b10;
+      --card:#ffffff;
+      --ink:#111;
+      --muted:#666;
+      --accent:#5b1bd6;
+      --accent2:#b832e6;
+    }
+
+    /* Layout */
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:#111;
+      background:#fafafa;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      min-height:100vh;
+    }
+    header{
+      width:100%;
+      background: linear-gradient(120deg, var(--purple), var(--pink));
+      color:#fff;
+      padding:18px 12px;
+      text-align:center;
+      box-shadow:0 6px 22px rgba(140,61,255,.25);
+      position:sticky; top:0; z-index:5;
+    }
+    .brand{
+      display:flex; align-items:center; justify-content:center; gap:10px;
+      max-width:960px; margin:0 auto;
+    }
+    .brand img{ height:44px; width:auto; border-radius:10px; background:rgba(255,255,255,.1) }
+    .brand h1{ font-size:22px; margin:0; letter-spacing:.2px; font-weight:800 }
+    .tag{ margin:6px 0 0; font-size:14px; opacity:.95; font-weight:600 }
+
+    .wrap{
+      width:100%; max-width:460px; padding:18px; margin:14px auto 40px;
+    }
+
+    /* Card */
+    .card{
+      background:var(--card);
+      border-radius:16px;
+      box-shadow: 0 12px 28px rgba(20,15,40,.10);
+      overflow:hidden;
+      border:1px solid #eee;
+    }
+
+    /* Chat Header strip */
+    .card-head{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:12px 14px; background:linear-gradient(120deg,#fff,#faf7ff);
+      border-bottom:1px solid #eee;
+    }
+    .mini{
+      font-size:12px; color:#666;
+    }
+
+    /* Chat area (slight gradient) */
+    #chatbox{
+      height:480px; overflow:auto; padding:16px;
+      background: linear-gradient(180deg, #ffffff, #fbf8ff);
+    }
+    .msg{ margin:8px 0; line-height:1.35 }
+    .msg b{ font-weight:700 }
+    .user{
+      text-align:right;
+    }
+    .user .bubble{
+      display:inline-block; background:#111; color:#fff;
+      padding:10px 12px; border-radius:14px; max-width:85%;
+    }
+    .bot{
+      text-align:left;
+    }
+    .bot .bubble{
+      display:inline-block;
+      background:#f4eefc; color:#111; border:1px solid #e7dcff;
+      padding:10px 12px; border-radius:14px; max-width:85%;
+    }
+
+    /* Input row */
+    .inputbar{
+      display:flex; gap:8px; padding:12px; border-top:1px solid #eee; background:#fff;
+    }
+    #message{
+      flex:1; padding:12px; border:1px solid #ddd; border-radius:10px; font-size:15px;
+    }
+
+    /* Buttons */
+  .btn{
+  cursor:pointer;
+  border:none;
+  border-radius:10px;
+  padding:12px 14px;
+  font-weight:800;
+  letter-spacing:.2px;
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  color:#fff;
+  box-shadow:0 8px 18px rgba(140,61,255,0.28);
+  transition: transform .06s ease, box-shadow .2s ease, opacity .2s ease;
+}
+.btn:hover{ transform:translateY(-1px) }
+.btn:active{ transform:translateY(0); opacity:.92 }
+
+    .btn-muted{
+      background:#ededed; color:#111; border:1px solid #ddd; box-shadow:none;
+    }
+    .btn-muted:hover{ background:#e6e6e6 }
+
+    .actions{
+      display:flex; gap:10px; margin:14px 0 6px; flex-wrap:wrap;
+    }
+    .revenue-box {
+  width: 400px;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  display: none;
+}
+.voice-box {
+  background:#fff;
+  border-radius:12px;
+  padding:18px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.08);
+  margin-top:20px;
+}
+
+.voice-section h3 {
+  margin-top:16px;
+  color:var(--accent);
+  font-size:1.2rem;
+}
+
+.voice-card {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#f8f8ff;
+  padding:10px 14px;
+  border-radius:10px;
+  margin:8px 0;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.voice-card div {
+  flex:1;
+  min-width:200px;
+  color:#333;
+}
+
+@media(max-width:600px){
+  .voice-card { flex-direction:column; align-items:flex-start; }
+  .voice-card button { width:100%; }
+}
+
+
+    /* Booking form (collapsible) */
+    #bookingForm{
+      margin-top:10px;
+      border:1px solid #eee; border-radius:14px; background:#fff;
+      overflow:hidden; max-height:0; opacity:0; transition: all .45s ease;
+      box-shadow:0 10px 26px rgba(20,15,40,.08);
+    }
+    #bookingForm.open{ padding:14px; max-height:520px; opacity:1 }
+    #bookingForm label{ font-size:13px; font-weight:700; color:#333 }
+    #bookingForm input{
+      width:100%; padding:10px; border:1px solid #ddd; border-radius:10px; margin:6px 0 10px;
+      font-size:14px; background:#fff;
+    }
+
+    /* Revenue panel */
+    #revPanel{
+      margin-top:10px; border:1px dashed #ddd; border-radius:14px; background:#fff;
+      padding:0; overflow:hidden; max-height:0; opacity:0; transition:all .45s ease;
+    }
+    #revPanel.open{ padding:14px; max-height:560px; opacity:1 }
+    .row{ display:flex; gap:8px; }
+    .row > div{ flex:1 }
+    .field{ margin-bottom:10px }
+    .field label{ display:block; font-size:12px; font-weight:700; color:#444; margin-bottom:6px }
+    .field input{
+      width:100%; padding:10px; border:1px solid #ddd; border-radius:10px; background:#fff
+    }
+    .result{ margin-top:8px; font-weight:800 }
+
+    /* Footer */
+    footer{ margin:18px 0 26px; color:#666; font-size:12px; text-align:center }
+    footer a{ color:var(--accent); text-decoration:none; font-weight:700 }
+
+    /* Mobile tweaks */
+    @media (max-width:520px){
+      .wrap{ padding:12px }
+      #chatbox{ height:60vh }
+      .actions{ gap:8px }
+      .brand h1{ font-size:18px }
+      .tag{ font-size:12px }
+    }
+    /* === Voice selection layout === */
+.voice-section{
+  margin-top:30px;
+  max-width:900px;
+  width:100%;
+}
+
+.voice-section h2{
+  font-size:1.4rem;
+  margin-bottom:6px;
+}
+
+.voice-section p{
+  margin:4px 0 12px;
+  color:#555;
+}
+
+.voice-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+  gap:14px;
+}
+
+.voice-card{
+  background:#fff;
+  border-radius:12px;
+  border:1px solid #eee;
+  padding:12px 14px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.04);
+}
+
+.voice-card h3{
+  margin:0 0 4px;
+  font-size:1.05rem;
+}
+
+.voice-card p{
+  margin:0 0 10px;
+  font-size:0.9rem;
+  color:#666;
+}
+
+.voice-card .btn-row{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+/* make preview button a bit lighter */
+.btn-secondary{
+  cursor:pointer;
+  border-radius:10px;
+  padding:10px 12px;
+  font-weight:700;
+  letter-spacing:.15px;
+  background:#fff;
+  color:#111;
+  border:1px solid #ddd;
+  box-shadow:0 4px 10px rgba(0,0,0,0.04);
+  transition:transform .06s ease, box-shadow .2s ease, opacity .2s ease;
+}
+.btn-secondary:hover{
+  transform:translateY(-1px);
+  box-shadow:0 6px 16px rgba(0,0,0,0.08);
+}
+.btn-secondary:active{
+  transform:translateY(0);
+  opacity:.9;
+}
+
+  </style>
+</head>
+<script>
+  // Open booking form if URL contains ?open=book
+  (function(){
+    const params = new URLSearchParams(location.search);
+    if (params.get("open") === "book") {
+      const form = document.getElementById("bookingForm");
+      if (form) form.classList.add("open");
+      // optional: scroll into view
+      form?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  })();
+</script>
+
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="brand">
+      <img src="logo.png" alt="Templeman AI Logo" />
+      <div>
+        <h1>Templeman AI – ReceptAInist</h1>
+        <div class="tag">24/7 ReceptAInist — Never Miss a Lead Again</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CARD -->
+  <div class="wrap">
+    <div class="card">
+      <div class="card-head">
+        <div><b>AI Receptionist</b></div>
+        <div class="mini">Live demo</div>
+      </div>
+
+      <!-- CHAT AREA -->
+      <div id="chatbox"></div>
+
+      <!-- INPUT + SEND -->
+      <div class="inputbar">
+        <input id="message" placeholder="Ask about pricing, booking, services…" />
+        <button id="send" class="btn">Send</button>
+      </div>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="actions">
+  <button id="book" class="btn">📅 Book Appointment</button>
+
+
+      <button id="speak" class="btn">🎤 Speak</button>
+    </div>
+<div class="actions">
+
+  <button id="signupBtn" class="btn">✨ Become a Client</button>
+</div>
+
+    <!-- BOOKING FORM -->
+    <div id="bookingForm">
+      <label>Title</label>
+      <input id="summary" placeholder="Meeting title (e.g., Consultation)" />
+
+      <div class="row">
+        <div>
+          <label>Start</label>
+          <input id="start" type="datetime-local" />
+        </div>
+        <div>
+          <label>End</label>
+          <input id="end" type="datetime-local" />
+        </div>
+      </div>
+
+      <div style="display:flex; gap:8px; margin-top:6px;">
+        <button id="confirmBook" class="btn">Confirm Booking</button>
+        <button id="cancelBook" class="btn-muted">Cancel</button>
+      </div>
+    </div>
+
+<!-- Missed Revenue Button (MATCHING BUTTON STYLE) -->
+<div id="revenueArea" style="margin-top:10px; width:400px;">
+ <button id="calcRevenue" class="btn">
+  💸 Missed Revenue
+</button>
+
+</div>
+
+<!-- Hidden Revenue Form -->
+<div id="revenueForm" class="revenue-box">
+  <label>Missed calls per day:</label><br/>
+  <input id="missedCalls" type="number" placeholder="e.g. 5"><br/>
+
+  <label>Average value per customer (£):</label><br/>
+  <input id="clientValue" type="number" placeholder="e.g. 100"><br/>
+
+  <button id="calculateLoss" style="background:#000;color:#fff;border:1px solid #000;border-radius:5px;padding:8px 14px;cursor:pointer;font-weight:bold;">
+    Calculate Loss
+  </button>
+  <button id="cancelRevenue" style="background:#ccc;border:none;border-radius:5px;padding:8px 14px;cursor:pointer;color:#000;">
+    Cancel
+  </button>
+</div>
+
+ <footer>
+      Powered by <a href="#" onclick="return false;">Templeman AI</a>
+    </footer>
+  </div>
+
+  <script>
+    const chatbox     = document.getElementById("chatbox");
+    const sendBtn     = document.getElementById("send");
+    const msgInput    = document.getElementById("message");
+
+    const bookBtn     = document.getElementById("book");
+    const bookingForm = document.getElementById("bookingForm");
+    const confirmBook = document.getElementById("confirmBook");
+    const cancelBook  = document.getElementById("cancelBook");
+
+    const speakBtn    = document.getElementById("speak");
+
+    const revBtn      = document.getElementById("toggleRev");
+    const revPanel    = document.getElementById("revPanel");
+    const callsEl     = document.getElementById("calls");
+    const missedEl    = document.getElementById("missed");
+    const convEl      = document.getElementById("conv");
+    const orderEl     = document.getElementById("order");
+    const daysEl      = document.getElementById("days");
+    const calcBtn     = document.getElementById("calc");
+    const calcOut     = document.getElementById("calcOut");
+
+    /* ========== CHAT ========== */
+    async function sendMessage(){
+      const text = msgInput.value.trim();
+      if(!text) return;
+
+      addUser(text);
+      msgInput.value = "";
+
+      try{
+        const res = await fetch("/chat", {
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ message:text })
+        });
+        const data = await res.json();
+        const reply = data.reply || data.error || "Something went wrong.";
+        addBot(reply);
+        speakText(reply);
+      }catch(err){
+        addBot("Sorry, the server is offline.");
+        console.error(err);
+      }
+    }
+
+    function addUser(t){
+      chatbox.innerHTML += `<div class="msg user"><span class="bubble"><b>You:</b> ${escapeHtml(t)}</span></div>`;
+      chatbox.scrollTop = chatbox.scrollHeight;
+    }
+    function addBot(t){
+      chatbox.innerHTML += `<div class="msg bot"><span class="bubble"><b>Receptionist:</b> ${t}</span></div>`;
+      chatbox.scrollTop = chatbox.scrollHeight;
+    }
+    function escapeHtml(s){
+      return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[m]));
+    }
+
+    sendBtn.addEventListener("click", sendMessage);
+    msgInput.addEventListener("keypress", e => { if(e.key==="Enter") sendMessage() });
+
+   /* ========== TTS (Coral, slow & warm delivery) ========== */
+async function speakText(text){
+  try{
+    const res = await fetch("/tts", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ text })
+    });
+    if(!res.ok) throw new Error("TTS failed");
+    const blob = await res.blob();
+    const url  = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    
+    audio.playbackRate = 0.95;  // ✅ slightly slower, calm and clear
+    await audio.play();
+  }catch(err){
+    console.warn("TTS error, falling back", err);
+
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "en-GB";
+    u.rate = 0.95; // calm pace on fallback voice
+    u.pitch = 1.0;
+    window.speechSynthesis.speak(u);
+  }
+}
+
+
+    // Quick mic (speech-to-text)
+    speakBtn.addEventListener("click", ()=>{
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if(!SR) return alert("Speech recognition not supported on this browser.");
+      const r = new SR(); r.lang = "en-GB"; r.start();
+      r.onresult = (e)=>{
+        const voiceText = e.results[0][0].transcript;
+        msgInput.value = voiceText;
+        sendMessage();
+      };
+    });
+
+    /* ========== BOOKING ========== */
+    bookBtn.addEventListener("click", ()=> bookingForm.classList.add("open"));
+    cancelBook.addEventListener("click", ()=> bookingForm.classList.remove("open"));
+
+    confirmBook.addEventListener("click", async ()=>{
+      const summary = document.getElementById("summary").value.trim();
+      const startInput = document.getElementById("start").value;
+      const endInput   = document.getElementById("end").value;
+
+      if(!summary || !startInput || !endInput){
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      const startISO = new Date(startInput).toISOString();
+      const endISO   = new Date(endInput).toISOString();
+
+      addUser(`Book '${summary}' at ${startISO}`);
+
+      const res = await fetch("/book",{
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({ summary, start:startISO, end:endISO })
+      });
+      const data = await res.json();
+      const visible = (data.reply || data.message || data.error || "Booking processed.") + " Is there anything else you'd like me to arrange?";
+
+      addBot(visible);
+      speakText(`I've booked '${summary}' for the ${formatSpokenDate(startISO)}. Is there anything else you'd like me to arrange?`);
+
+      // reset/close
+      bookingForm.classList.remove("open");
+      document.getElementById("summary").value = "";
+      document.getElementById("start").value = "";
+      document.getElementById("end").value = "";
+    });
+
+    function formatSpokenDate(iso){
+      const d = new Date(iso);
+      const day = d.getDate();
+      const suffix = (n=>{
+        if([11,12,13].includes(n%100)) return "th";
+        switch(n%10){ case 1: return "st"; case 2: return "nd"; case 3: return "rd"; default: return "th"; }
+      })(day);
+
+      const opts = { month:"long", hour:"numeric", minute:"2-digit", hour12:true };
+      const base = d.toLocaleString("en-GB", opts); // e.g., "October, 3:15 pm"
+      const weekday = d.toLocaleString("en-GB", { weekday:"long" }); // "Tuesday"
+      return `${weekday} the ${day}${suffix} of ${base}`;
+    }
+
+// === MISSED REVENUE CALCULATOR ===
+const calcRevenueBtn = document.getElementById("calcRevenue");
+const revenueForm = document.getElementById("revenueForm");
+const calculateLoss = document.getElementById("calculateLoss");
+const cancelRevenue = document.getElementById("cancelRevenue");
+
+calcRevenueBtn.addEventListener("click", () => {
+  revenueForm.style.display = "block";
+});
+
+cancelRevenue.addEventListener("click", () => {
+  revenueForm.style.display = "none";
+});
+
+calculateLoss.addEventListener("click", () => {
+  const calls = document.getElementById("missedCalls").value;
+  const value = document.getElementById("clientValue").value;
+
+  if (!calls || !value) {
+    alert("Please enter both fields.");
+    return;
+  }
+
+  const monthlyLoss = calls * value * 30;
+  const message = `You could be missing £${monthlyLoss.toLocaleString()} every month in lost leads.`;
+
+  chatbox.innerHTML += `<div class='msg bot'><b>Receptionist:</b> ${message}</div>`;
+  revenueForm.style.display = "none";
+
+  // 🔊 Speak the result aloud
+  speakText(message + " Would you like me to help you recover these leads by answering calls 24/7?");
+chatbox.innerHTML += `<div class='msg bot'><b>Receptionist:</b> Would you like me to help you recover these leads by answering calls 24/7?</div>`;
+
+});
+
+// OPEN SIGNUP PAGE
+document.getElementById("signupBtn").addEventListener("click", () => {
+  window.location.href = "/signup";
+});
+
+</script>
+
+<!-- =======================================================
+ 🎙️  VOICE SELECTION AREA  (Standard / Premium / Elite)
+======================================================= -->
+<section id="voiceSelection" style="margin-top:40px;text-align:center;">
+  <h2 style="margin-bottom:16px;">🎤 Choose Your Voice</h2>
+
+  <div style="display:flex;flex-direction:column;gap:14px;align-items:center;max-width:400px;margin:auto;">
+    <!-- STANDARD -->
+    <button class="btn" onclick="previewVoice('Coral')">
+      🌸 Coral (Standard) — Included
+    </button>
+<button class="btn" onclick="previewLocalVoice('derek')">▶ Derek (Standard)</button>
+<button class="btn" onclick="previewLocalVoice('clyde')">▶ Clyde (Standard)</button>
+
+ <!-- VOICE SELECTION PANEL -->
+<section class="card" style="margin-top:18px;">
+  <h3 style="margin-bottom:8px;">Choose Your Receptionist’s Voice</h3>
+  <p style="font-size:0.9rem; color:#666; margin-top:0;">
+    First pick a voice style you like, then we’ll lock it in when you become a client.
+  </p>
+
+  <!-- Standard Voices -->
+  <div style="margin-top:12px;">
+    <h4 style="margin:6px 0;">Standard Voices (included)</h4>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+      <button class="btn" type="button"
+              onclick="previewLocalVoice('coral'); selectVoice('Coral (Standard)')">
+        ▶ Coral (Standard)
+      </button>
+      <button class="btn" type="button"
+              onclick="previewLocalVoice('derek'); selectVoice('Derek (Standard)')">
+        ▶ Derek (Standard)
+      </button>
+      <button class="btn" type="button"
+              onclick="previewLocalVoice('clyde'); selectVoice('Clyde (Standard)')">
+        ▶ Clyde (Standard)
+      </button>
+    </div>
+  </div>
+
+  <!-- Premium Voices -->
+  <div style="margin-top:14px;">
+    <h4 style="margin:6px 0;">Premium Voices</h4>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+      <button class="btn" type="button"
+              onclick="previewLocalVoice('blondi'); selectVoice('Blondi (Premium)')">
+        ▶ Blondi (Premium)
+      </button>
+      <button class="btn" type="button"
+              onclick="previewLocalVoice('clara'); selectVoice('Clara (Premium)')">
+        ▶ Clara (Premium)
+      </button>
+      <button class="btn" type="button"
+              onclick="previewLocalVoice('frederick'); selectVoice('Frederick Surrey (Premium)')">
+        ▶ Frederick Surrey (Premium)
+      </button>
+      <button class="btn" type="button"
+              onclick="previewLocalVoice('hope'); selectVoice('Hope (Premium)')">
+        ▶ Hope (Premium)
+      </button>
+    </div>
+  </div>
+
+  <!-- Elite Voices -->
+  <div style="margin-top:14px;">
+    <h4 style="margin:6px 0;">Elite Voices</h4>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+      <button class="btn" type="button"
+              onclick="previewLocalVoice('james'); selectVoice('James (Elite)')">
+        ▶ James (Elite)
+      </button>
+      <button class="btn" type="button"
+              onclick="previewLocalVoice('jess'); selectVoice('Jess (Elite)')">
+        ▶ Jess (Elite)
+      </button>
+      <button class="btn" type="button"
+              onclick="previewLocalVoice('lily'); selectVoice('Lily (Elite)')">
+        ▶ Lily (Elite)
+      </button> <!-- 🌸 this is the one you were missing -->
+    </div>
+  </div>
+
+  <p id="voiceConfirm" style="margin-top:10px;font-size:0.9rem;color:#333;">
+    No voice selected yet.
+  </p>
+  <input type="hidden" id="voice_choice" name="voice_choice" value="">
+</section>
+
+  <p id="voiceConfirm" style="margin-top:20px;font-weight:bold;"></p>
+</section>
+
+<script>
+async function previewVoice(type) {
+  try {
+    const res = await fetch("/tts-preview", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        text: `Hello! I'm ${type}, your AI receptionist — ready to answer every call for your business.`,
+        voice: type
+      })
+    });
+
+    if (!res.ok) throw new Error("TTS preview failed");
+
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    audio.play();
+    document.getElementById("voiceConfirm").innerText = `✅ Now playing: ${type}`;
+  } catch (err) {
+    console.error("Preview error:", err);
+    alert("Sorry, that voice preview didn’t load. Please try again.");
+  }
+}
+
+  // Map voice keys to your local MP3 files
+  const voiceFiles = {
+    // --- Standard Voices ---
+    coral:  "voices/Coral-standard.mp3",
+    derek:  "voices/Derek-standard.mp3",   // or "dereck-standard.mp3" if that's the real name
+    clyde:  "voices/Clyde-standard.mp3",   // or "Clyde-stard.mp3" if you kept that name
+
+    // --- Premium Voices ---
+    blondi:    "voices/Blondi-premium.mp3",
+    clara:     "voices/Clara-premium.mp3",
+    frederick: "voices/Frederick-Surry-premium.mp3",
+    hope:      "voices/Hope-premium.mp3",
+
+    // --- Elite Voices ---
+    james: "voices/James-elite.mp3",
+    jess:  "voices/Jess-elite.mp3",
+    lily:  "voices/Lily-elite.mp3"         // 🔊 make sure filename matches exactly
+  };
+
+  async function previewLocalVoice(key){
+    const file = voiceFiles[key];
+    if (!file) {
+      alert("Preview not available for this voice.");
+      return;
+    }
+    try {
+      const audio = new Audio(file);
+      await audio.play();
+    } catch (err) {
+      console.error("Playback error:", err);
+      alert("Couldn’t play the preview. Check your voices folder.");
+    }
+  }
+
+  function selectVoice(label){
+    const confirm = document.getElementById("voiceConfirm");
+    const hidden  = document.getElementById("voice_choice");
+    if (confirm) {
+      confirm.innerHTML = `✅ Selected voice: <strong>${label}</strong>`;
+    }
+    if (hidden) {
+      hidden.value = label;
+    }
+  }
+</script>
+
+
+
+
+
+</body>
+</html>
