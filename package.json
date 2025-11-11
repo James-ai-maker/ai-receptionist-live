@@ -2,13 +2,14 @@
   "name": "ai-receptionist-app",
   "version": "1.0.0",
   "type": "module",
-  "main": "render-server.js",
+  "main": "server-demo.js",
   "scripts": {
-    "start": "node render-server.js"
+    "start": "node server-demo.js"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "dotenv": "^16.4.5",
+    "openai": "^4.54.0"
   }
 }
-
 
